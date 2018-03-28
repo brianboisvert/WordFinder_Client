@@ -9,7 +9,6 @@ const img = props.firstThought ? props.firstThought.image : null
 const imgage = props.firstThought ? allImgs[Math.floor(Math.random() * allImgs.length)]
  : null
 
-console.log(img)
 
   return(
     <div>

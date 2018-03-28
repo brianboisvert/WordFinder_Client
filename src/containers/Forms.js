@@ -1,11 +1,13 @@
 import React from 'react';
-import { postWord, randomWord, clearWords, findRhyme, kimsThought, clearWordState, clearRhymingWords, clearAllWords, clearKimsThought, currentWord } from '../actions/words'
+import { postWord, randomWord, clearWords, findRhyme, kimsThought, clearWordState, clearRhymingWords, clearAllWords, clearKimsThought, currentWord, addErrorforRandom, addGeneralError } from '../actions/words'
 import { connect } from 'react-redux';
+import Errors from '../components/Errors'
 
 class Forms extends React.Component {
 
   state = {
-    word: ''
+    word: '',
+    showErrors: false
   }
 
   handleChange = (event) => {
@@ -17,15 +19,23 @@ class Forms extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.postWord(this.state);
-    alert("Submitted");
     event.target.reset();
   }
 
   handleRandom = (event) => {
     event.preventDefault();
     if (this.props.allWords.length < 2) {
-      alert("Enter two or more words")
+      this.setState({
+        ["showErrors"]: true
+      });
+      this.props.addErrorforRandom();
+      this.props.clearKimsThought();
+      this.props.clearRhymingWords();
+      // alert("Enter two or more words")
     } else {
+      this.setState({
+        ["showErrors"]: false
+      });
       this.props.randomWord();
       this.props.clearKimsThought();
       this.props.clearRhymingWords();
@@ -34,6 +44,9 @@ class Forms extends React.Component {
 
   handleClearWords = (event) => {
     event.preventDefault();
+    this.setState({
+      ["showErrors"]: false
+    });
     this.props.clearWords();
     this.props.clearWordState();
     this.props.clearRhymingWords();
@@ -44,8 +57,15 @@ class Forms extends React.Component {
   handleRhyme = (event) => {
     event.preventDefault();
     if (this.state.word === "") {
-      alert("Enter a word")
+      this.setState({
+        ["showErrors"]: true
+      });
+      this.props.clearKimsThought();
+      this.props.clearWordState();
     } else {
+      this.setState({
+        ["showErrors"]: false
+      });
       this.props.findRhyme(this.state);
       this.props.clearWordState();
       this.props.clearKimsThought();
@@ -55,8 +75,15 @@ class Forms extends React.Component {
   handleKim = (event) => {
     event.preventDefault();
     if (this.state.word === "") {
-      alert("Enter a word")
+      this.setState({
+        ["showErrors"]: true
+      });
+      this.props.clearRhymingWords();
+      this.props.clearWordState();
     } else {
+      this.setState({
+        ["showErrors"]: false
+      });
     this.props.currentWord(this.state);
     this.props.kimsThought();
     this.props.clearRhymingWords();
@@ -82,7 +109,8 @@ class Forms extends React.Component {
         </button>
         <button onClick={this.handleKim}>
           Click to see what Kim thinks
-        </button>
+        </button><br /><br />
+        {this.state.showErrors ? <Errors /> : null}
       </div>
     )
   }
@@ -107,6 +135,8 @@ const mapDispatchToProps = (dispatch) => {
     clearAllWords: () => {dispatch(clearAllWords())},
     clearKimsThought: () => {dispatch(clearKimsThought())},
     currentWord: (word) => {dispatch(currentWord(word))},
+    addErrorforRandom: () => {dispatch(addErrorforRandom())},
+    addGeneralError: () => {dispatch(addGeneralError())}
   }
 }
 

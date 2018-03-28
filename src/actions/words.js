@@ -101,6 +101,14 @@ export function clearCurrentWord() {
   return {type: 'CLEAR_CURRENT_WORD', payload: null}
 }
 
+export function addErrorforRandom() {
+  return {type: "ADD_ERROR", payload: "Please enter at least two words" }
+}
+
+export function addGeneralError() {
+  return {type: "ADD_ERROR", payload: "Please enter a word" }
+}
+
 //NO fetch
 export function currentWord(word) {
   return {type: 'CURRENT_WORD', payload: word}

@@ -8,9 +8,8 @@ import KimsThought from './components/KimsThought'
 class App extends Component {
 
   render() {
-    console.log(this.props);
     return (
-      <div style={{"text-align": "center"}}>
+      <div style={{"textAlign": "center"}}>
         <h1>WordFinder!</h1>
         <Forms />
         <RandomWord />
